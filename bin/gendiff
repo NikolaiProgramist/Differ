@@ -31,14 +31,13 @@ $doc = <<<DOC
 Usage:
   gendiff (-h|--help)
   gendiff (-v|--version)
-  gendiff [--light <theme>]
-  gendiff [--format <fmt>] <firstFile> <secondFile>
+  gendiff [--format <fmt>, --light <theme>] <firstFile> <secondFile>
 
 Options:
   -h --help                     Show this screen
   -v --version                  Show version
-  --light <theme>               Report color [default: default]
-  --format <fmt>                Report format [default: stylish]
+  -l --light <theme>               Report color [default: default]
+  -f --format <fmt>                Report format [default: stylish]
 DOC;
 
 $args = Docopt::handle($doc, array('version' => $about));
