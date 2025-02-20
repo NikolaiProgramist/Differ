@@ -2,12 +2,17 @@
 
 namespace Differ\Formatters\Plain;
 
+use Exception;
+
 use function Differ\Backlight\getColors;
 
 const ADD_MARKER = 'added';
 const REMOVE_MARKER = 'removed';
 const UPDATED_MARKER = 'updated';
 
+/**
+ * @throws Exception
+ */
 function plain(array $tree, string $theme, string $path = '', int $depth = 1): string
 {
     return array_reduce(
@@ -32,11 +37,13 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
                 $value = getString($keyData['children'], $theme);
 
                 if ($status === 'add') {
+                    // phpcs:ignore
                     $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['end']}m \033[{$colors['text']}mwas {$addMarker} with value: \033[{$colors['end']}m{$value}\n";
                     return "{$resultString}{$string}";
                 }
 
                 if ($status === 'remove') {
+                    // phpcs:ignore
                     $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas \033[{$colors['symbol']}m{$removeMarker}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
@@ -49,11 +56,13 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
                 $value = getString($keyData['value'], $theme);
 
                 if ($status === 'add') {
+                    // phpcs:ignore
                     $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$addMarker} with value: {$value}\n";
                     return "{$resultString}{$string}";
                 }
 
                 if ($status === 'remove') {
+                    // phpcs:ignore
                     $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas \033[{$colors['symbol']}m{$removeMarker}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
@@ -62,6 +71,7 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
             $beforeValue = getString($keyData['beforeValue'], $theme);
             $afterValue = getString($keyData['afterValue'], $theme);
 
+            // phpcs:ignore
             $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$updatedMarker}. From {$beforeValue} to {$afterValue}\n";
             return "{$resultString}{$string}";
         },
@@ -69,11 +79,15 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
     );
 }
 
+/**
+ * @throws Exception
+ */
 function getString(mixed $string, $theme): string
 {
     $colors = getColors($theme);
 
     if (is_bool($string)) {
+        // phpcs:ignore
         return $string ? "\033[{$colors['special']}mtrue\033[{$colors['end']}m" : "\033[{$colors['special']}mfalse\033[{$colors['end']}m";
     }
 

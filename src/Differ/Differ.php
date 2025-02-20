@@ -11,8 +11,12 @@ use function Differ\Parser\parseToJson;
 /**
  * @throws Exception
  */
-function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish', string $theme = 'default'): string
-{
+function genDiff(
+    string $pathToFile1,
+    string $pathToFile2,
+    string $format = 'stylish',
+    string $theme = 'default'
+): string {
     $firstFile = parseToJson($pathToFile1);
     $secondFile = parseToJson($pathToFile2);
 
