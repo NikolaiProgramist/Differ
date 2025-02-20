@@ -2,15 +2,17 @@
 
 namespace Differ\Formatters\Plain;
 
+use function Differ\Backlight\getColors;
+
 const ADD_MARKER = 'added';
 const REMOVE_MARKER = 'removed';
 const UPDATED_MARKER = 'updated';
 
-function plain(array $tree, string $path = '', int $depth = 1): string
+function plain(array $tree, string $theme, string $path = '', int $depth = 1): string
 {
     return array_reduce(
         array_keys($tree),
-        function ($acc, $key) use ($tree, $path, $depth) {
+        function ($acc, $key) use ($tree, $path, $depth, $theme) {
             $keyData = $tree[$key];
             $status = $tree[$key]['status'] ?? 'add';
             $newPath = $depth === 1 ? $key : "{$path}.{$key}";
@@ -20,6 +22,8 @@ function plain(array $tree, string $path = '', int $depth = 1): string
             $removeMarker = REMOVE_MARKER;
             $updatedMarker = UPDATED_MARKER;
 
+            $colors = getColors($theme);
+
             if ($status === 'unchanged') {
                 return $resultString;
             }
@@ -28,16 +32,16 @@ function plain(array $tree, string $path = '', int $depth = 1): string
                 $value = getString($keyData['children']);
 
                 if ($status === 'add') {
-                    $string = "Property '{$newPath}' was {$addMarker} with value: {$value}\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['end']}m \033[{$colors['text']}mwas {$addMarker} with value: \033[{$colors['symbols']}m{$value}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
 
                 if ($status === 'remove') {
-                    $string = "Property '{$newPath}' was {$removeMarker}\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$removeMarker}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
 
-                $string = plain($keyData['children'], $newPath, $depth + 1);
+                $string = plain($keyData['children'], $theme, $newPath, $depth + 1);
                 return "{$resultString}{$string}";
             }
 
@@ -45,12 +49,12 @@ function plain(array $tree, string $path = '', int $depth = 1): string
                 $value = getString($keyData['value']);
 
                 if ($status === 'add') {
-                    $string = "Property '{$newPath}' was {$addMarker} with value: {$value}\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$addMarker} with value: \033[{$colors['symbols']}m{$value}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
 
                 if ($status === 'remove') {
-                    $string = "Property '{$newPath}' was {$removeMarker}\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas \033[{$colors['symbols']}m{$removeMarker}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
             }
@@ -58,7 +62,7 @@ function plain(array $tree, string $path = '', int $depth = 1): string
             $beforeValue = getString($keyData['beforeValue']);
             $afterValue = getString($keyData['afterValue']);
 
-            $string = "Property '{$newPath}' was {$updatedMarker}. From {$beforeValue} to {$afterValue}\n";
+            $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$updatedMarker}. From \033[{$colors['symbols']}m{$beforeValue} \033[{$colors['text']}mto \033[{$colors['symbols']}m{$afterValue}\033[{$colors['end']}m\n";
             return "{$resultString}{$string}";
         },
         ''
