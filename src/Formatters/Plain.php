@@ -29,15 +29,15 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
             }
 
             if (array_key_exists('children', $keyData)) {
-                $value = getString($keyData['children']);
+                $value = getString($keyData['children'], $theme);
 
                 if ($status === 'add') {
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['end']}m \033[{$colors['text']}mwas {$addMarker} with value: \033[{$colors['symbols']}m{$value}\033[{$colors['end']}m\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['end']}m \033[{$colors['text']}mwas {$addMarker} with value: {$value}\n";
                     return "{$resultString}{$string}";
                 }
 
                 if ($status === 'remove') {
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$removeMarker}\033[{$colors['end']}m\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas \033[{$colors['symbol']}m{$removeMarker}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
 
@@ -46,45 +46,51 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
             }
 
             if (array_key_exists('value', $keyData)) {
-                $value = getString($keyData['value']);
+                $value = getString($keyData['value'], $theme);
 
                 if ($status === 'add') {
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$addMarker} with value: \033[{$colors['symbols']}m{$value}\033[{$colors['end']}m\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$addMarker} with value: {$value}\n";
                     return "{$resultString}{$string}";
                 }
 
                 if ($status === 'remove') {
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas \033[{$colors['symbols']}m{$removeMarker}\033[{$colors['end']}m\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas \033[{$colors['symbol']}m{$removeMarker}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
             }
 
-            $beforeValue = getString($keyData['beforeValue']);
-            $afterValue = getString($keyData['afterValue']);
+            $beforeValue = getString($keyData['beforeValue'], $theme);
+            $afterValue = getString($keyData['afterValue'], $theme);
 
-            $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$updatedMarker}. From \033[{$colors['symbols']}m{$beforeValue} \033[{$colors['text']}mto \033[{$colors['symbols']}m{$afterValue}\033[{$colors['end']}m\n";
+            $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}' \033[{$colors['text']}mwas {$updatedMarker}. From {$beforeValue} to {$afterValue}\n";
             return "{$resultString}{$string}";
         },
         ''
     );
 }
 
-function getString(mixed $string): string
+function getString(mixed $string, $theme): string
 {
+    $colors = getColors($theme);
+
     if (is_bool($string)) {
-        return $string ? 'true' : 'false';
+        return $string ? "\033[{$colors['special']}mtrue\033[{$colors['end']}m" : "\033[{$colors['special']}mfalse\033[{$colors['end']}m";
     }
 
     if (is_null($string)) {
-        return 'null';
+        return "\033[{$colors['special']}mnull\033[{$colors['end']}m";
     }
 
     if (is_array($string)) {
-        return '[complex value]';
+        return "\033[{$colors['special']}m[complex value]\033[{$colors['end']}m";
+    }
+
+    if (is_numeric($string)) {
+        return "\033[{$colors['symbol']}m{$string}\033[{$colors['end']}m";
     }
 
     if (is_string($string)) {
-        return "'{$string}'";
+        return "\033[{$colors['symbol']}m'{$string}'\033[{$colors['end']}m";
     }
 
     return $string;
