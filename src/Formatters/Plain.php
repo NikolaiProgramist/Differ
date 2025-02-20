@@ -32,7 +32,7 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
                 $value = getString($keyData['children'], $theme);
 
                 if ($status === 'add') {
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['end']}m \033[{$colors['text']}mwas {$addMarker} with value: {$value}\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['end']}m \033[{$colors['text']}mwas {$addMarker} with value: \033[{$colors['end']}m{$value}\n";
                     return "{$resultString}{$string}";
                 }
 
@@ -82,7 +82,7 @@ function getString(mixed $string, $theme): string
     }
 
     if (is_array($string)) {
-        return "\033[{$colors['special']}m[complex value]\033[{$colors['end']}m";
+        return "\033[{$colors['complex']}m[complex value]\033[{$colors['end']}m";
     }
 
     if (is_numeric($string)) {
