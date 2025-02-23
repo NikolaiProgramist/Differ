@@ -2,7 +2,12 @@
   "end": "0",
   "primary": "1",
   "text": "0",
+  "string": "0",
+  "number": "0",
   "symbol": "0",
   "complex": "7",
-  "special": "4"
+  "special": "4",
+  "info": "0",
+  "add": "1",
+  "remove": "1"
 }

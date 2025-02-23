@@ -2,7 +2,12 @@
   "end": "0",
   "primary": "34",
   "text": "0",
+  "string": "32",
+  "number": "36",
   "symbol": "32",
   "complex": "35",
-  "special": "35"
+  "special": "35",
+  "info": "0",
+  "add": "32",
+  "remove": "31"
 }
