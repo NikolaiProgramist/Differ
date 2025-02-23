@@ -16,6 +16,6 @@ function selectFormatter(array $tree, string $format, string $theme): string
     return match ($format) {
         'plain' => plain($tree, $theme),
         'json' => json($tree),
-        default => stylish($tree),
+        default => stylish($tree, $theme),
     };
 }

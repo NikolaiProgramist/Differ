@@ -2,32 +2,21 @@
 
 namespace Differ\Formatters\Stylish;
 
-use Exception;
-
-use function Differ\Backlight\getColors;
-
 const ADD_MARKER = '+';
 const REMOVE_MARKER = '-';
 const UNCHANGED_MARKER = ' ';
 
-/**
- * @throws Exception
- */
-function stylish(array $tree, $theme, string $replacer = ' ', int $spacesCount = 4): string
+function stylish(array $tree, string $replacer = ' ', int $spacesCount = 4): string
 {
-    $colors = getColors($theme);
-    $result = getStylish($tree, $replacer, $spacesCount, $colors);
+    $result = getStylish($tree, $replacer, $spacesCount);
     return "{\n{$result}}";
 }
 
-/**
- * @throws Exception
- */
-function getStylish(array $tree, string $replacer, int $spacesCount, $colors, int $depth = 1): string
+function getStylish(array $tree, string $replacer, int $spacesCount, int $depth = 1): string
 {
     return array_reduce(
         array_keys($tree),
-        function ($acc, $key) use ($tree, $replacer, $spacesCount, $colors, $depth) {
+        function ($acc, $key) use ($tree, $replacer, $spacesCount, $depth) {
             $keyData = $tree[$key];
             $statusName = $tree[$key]['status'] ?? 'add';
             $resultString = $acc;
@@ -45,19 +34,19 @@ function getStylish(array $tree, string $replacer, int $spacesCount, $colors, in
                 $value = $keyData['children'];
 
                 if ($status === ADD_MARKER) {
-                    $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1, $colors);
-                    $string = getStylishInnerContent($status, $key, $innerContent, $indentation, $colors);
+                    $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1);
+                    $string = getStylishInnerContent($status, $key, $innerContent, $indentation);
                     return "{$resultString}{$string}";
                 }
 
-                $innerContent = getStylish($value, $replacer, $spacesCount, $colors, $depth + 1);
-                $string = getStylishInnerContent($status, $key, $innerContent, $indentation, $colors);
+                $innerContent = getStylish($value, $replacer, $spacesCount, $depth + 1);
+                $string = getStylishInnerContent($status, $key, $innerContent, $indentation);
                 return "{$resultString}{$string}";
             }
 
             if (array_key_exists('value', $keyData)) {
                 $value = $keyData['value'];
-                $string = getStylishString($status, $key, $value, $indentation, $colors);
+                $string = getStylishString($status, $key, $value, $indentation);
                 return "{$resultString}{$string}";
             }
 
@@ -72,16 +61,14 @@ function getStylish(array $tree, string $replacer, int $spacesCount, $colors, in
                 REMOVE_MARKER,
                 $keyData['beforeValue'],
                 $key,
-                $data,
-                $colors
+                $data
             );
 
             $stringAfter = getChangedString(
                 ADD_MARKER,
                 $keyData['afterValue'],
                 $key,
-                $data,
-                $colors
+                $data
             );
 
             return "{$resultString}{$stringBefore}{$stringAfter}";
@@ -90,92 +77,57 @@ function getStylish(array $tree, string $replacer, int $spacesCount, $colors, in
     );
 }
 
-/**
- * @throws Exception
- */
-function getArrayContent(array $tree, string $replacer, int $spacesCount, int $depth, $colors): string
+function getArrayContent(array $tree, string $replacer, int $spacesCount, int $depth): string
 {
-    return array_reduce(array_keys($tree), function ($acc, $key) use ($tree, $replacer, $spacesCount, $depth, $colors) {
+    return array_reduce(array_keys($tree), function ($acc, $key) use ($tree, $replacer, $spacesCount, $depth) {
         $indentationCount = $spacesCount * $depth - 2;
         $indentation = str_repeat($replacer, $indentationCount);
         $resultString = $acc;
 
         if (array_key_exists('value', $tree[$key])) {
             $value = $tree[$key]['value'];
-            $string = getStylishString(UNCHANGED_MARKER, $key, $value, $indentation, $colors);
+            $string = getStylishString(UNCHANGED_MARKER, $key, $value, $indentation);
             return "{$resultString}{$string}";
         }
 
         $value = $tree[$key]['children'];
-        $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1, $colors);
-        return getStylishInnerContent(UNCHANGED_MARKER, $key, $innerContent, $indentation, $colors);
+        $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1);
+        return getStylishInnerContent(UNCHANGED_MARKER, $key, $innerContent, $indentation);
     }, '');
 }
 
-// phpcs:ignore
-function getStylishInnerContent(string $marker, int|string $key, string $innerContent, string $indentation, $colors): string
+function getStylishInnerContent(string $marker, int|string $key, string $innerContent, string $indentation): string
 {
-    $colorMarker = getMarker($marker, $colors);
-    $colorKey = "\033[{$colors['primary']}m{$key}\033[{$colors['end']}m";
-
-    return "{$indentation}{$colorMarker} {$colorKey}: {\n{$innerContent}{$indentation}  }\n";
+    return "{$indentation}{$marker} {$key}: {\n{$innerContent}{$indentation}  }\n";
 }
 
-function getStylishString(string $marker, int|string $key, mixed $value, string $indentation, $colors): string
+function getStylishString(string $marker, int|string $key, mixed $value, string $indentation): string
 {
-    $keyValue = getString($value, $colors);
-    $colorMarker = getMarker($marker, $colors);
-    $colorKey = "\033[{$colors['primary']}m{$key}\033[{$colors['end']}m";
-
-    return "{$indentation}{$colorMarker} {$colorKey}: {$keyValue}\n";
+    $keyValue = getString($value);
+    return "{$indentation}{$marker} {$key}: {$keyValue}\n";
 }
 
-/**
- * @throws Exception
- */
-function getChangedString(string $marker, mixed $value, int|string $key, array $data, $colors): string
+function getChangedString(string $marker, mixed $value, int|string $key, array $data): string
 {
     if (!is_array($value)) {
-        $result = getStylishString($marker, $key, $value, $data['indentation'], $colors);
+        $result = getStylishString($marker, $key, $value, $data['indentation']);
     } else {
-        $innerContent = getStylish($value, $data['replacer'], $data['spacesCount'], $colors, $data['depth'] + 1);
-        $result = getStylishInnerContent($marker, $key, $innerContent, $data['indentation'], $colors);
+        $innerContent = getStylish($value, $data['replacer'], $data['spacesCount'], $data['depth'] + 1);
+        $result = getStylishInnerContent($marker, $key, $innerContent, $data['indentation']);
     }
 
     return $result;
 }
 
-function getString(mixed $string, $colors): string
+function getString(mixed $string): string
 {
     if (is_bool($string)) {
-        // phpcs:ignore
-        return $string ? "\033[{$colors['special']}mtrue\033[{$colors['end']}m" : "\033[{$colors['special']}mfalse\033[{$colors['end']}m";
+        return $string ? 'true' : 'false';
     }
 
     if (is_null($string)) {
-        return "\033[{$colors['special']}mnull\033[{$colors['end']}m";
-    }
-
-    if (is_numeric($string)) {
-        return "\033[{$colors['number']}m{$string}\033[{$colors['end']}m";
-    }
-
-    if (is_string($string)) {
-        return "\033[{$colors['string']}m'{$string}'\033[{$colors['end']}m";
+        return 'null';
     }
 
     return $string;
-}
-
-function getMarker(string $marker, $colors): string
-{
-    if ($marker === ADD_MARKER) {
-        return "\033[{$colors['add']}m{$marker}\033[{$colors['end']}m";
-    }
-
-    if ($marker === REMOVE_MARKER) {
-        return "\033[{$colors['remove']}m{$marker}\033[{$colors['end']}m";
-    }
-
-    return $marker;
 }
