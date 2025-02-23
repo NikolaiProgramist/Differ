@@ -23,8 +23,8 @@ $about = <<<ABOUT
 Version: 1.0
 
 Utility/Library for finding differences between data structures.
-With different output formats (stylish, plain, json). Use -f --format.
-You can also choose different output themes (default, white, contrast, green). Use -t --theme.
+With different output formats (stylish, plain, json).
+You can also choose different output themes (default, white, contrast, green).
 ABOUT;
 
 
