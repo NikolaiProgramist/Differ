@@ -44,7 +44,7 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
 
                 if ($status === 'remove') {
                     // phpcs:ignore
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was \033[{$colors['symbol']}m{$removeMarker}\033[{$colors['end']}m\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was \033[{$colors['remove']}m{$removeMarker}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
 
@@ -57,13 +57,13 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
 
                 if ($status === 'add') {
                     // phpcs:ignore
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was {$addMarker} with value: {$value}\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was \033[{$colors['add']}m{$addMarker}\033[{$colors['end']}m with value: {$value}\n";
                     return "{$resultString}{$string}";
                 }
 
                 if ($status === 'remove') {
                     // phpcs:ignore
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was \033[{$colors['symbol']}m{$removeMarker}\033[{$colors['end']}m\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was \033[{$colors['remove']}m{$removeMarker}\033[{$colors['end']}m\n";
                     return "{$resultString}{$string}";
                 }
             }
@@ -100,11 +100,11 @@ function getString(mixed $string, $theme): string
     }
 
     if (is_numeric($string)) {
-        return "\033[{$colors['symbol']}m{$string}\033[{$colors['end']}m";
+        return "\033[{$colors['number']}m{$string}\033[{$colors['end']}m";
     }
 
     if (is_string($string)) {
-        return "\033[{$colors['symbol']}m'{$string}'\033[{$colors['end']}m";
+        return "\033[{$colors['string']}m'{$string}'\033[{$colors['end']}m";
     }
 
     return $string;
