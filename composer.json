@@ -1,6 +1,6 @@
 {
     "name": "hexlet/code",
-    "description": "Util for search different between data structure. With different formats of files.",
+    "description": "Util for search different between data structure. With different formats of files. You can also choose different output themes",
     "type": "project",
     "require": {
         "wp-cli/php-cli-tools": "^0.12.0",
