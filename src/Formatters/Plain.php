@@ -38,7 +38,7 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
 
                 if ($status === 'add') {
                     // phpcs:ignore
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['end']}m\033[{$colors['text']}m was \033[{$colors['add']}m{$addMarker}\033[{$colors['end']}m with value: {$value}\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['end']}m\033[{$colors['text']}m was \033[{$colors['add']}m{$addMarker}\033[{$colors['text']}m with value: {$value}\n";
                     return "{$resultString}{$string}";
                 }
 
@@ -57,7 +57,7 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
 
                 if ($status === 'add') {
                     // phpcs:ignore
-                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was \033[{$colors['add']}m{$addMarker}\033[{$colors['end']}m with value: {$value}\n";
+                    $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was \033[{$colors['add']}m{$addMarker}\033[{$colors['text']}m with value: {$value}\n";
                     return "{$resultString}{$string}";
                 }
 
