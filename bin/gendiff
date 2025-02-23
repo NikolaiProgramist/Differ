@@ -24,7 +24,7 @@ Version: 1.0
 
 Utility/Library for finding differences between data structures.
 With different output formats (stylish, plain, json). Use -f --format.
-You can also choose different output themes (default, white). Use -l --light.
+You can also choose different output themes (default, white, contrast, green). Use -t --theme.
 ABOUT;
 
 
@@ -32,15 +32,15 @@ $doc = <<<DOC
 Usage:
   gendiff (-h|--help)
   gendiff (-v|--version)
-  gendiff [--format <fmt>, --light <theme>] <firstFile> <secondFile>
+  gendiff [--format <fmt>, --theme <thm>] <firstFile> <secondFile>
 
 Options:
   -h --help                     Show this screen
+  -t --theme <thm>              Report theme [default: default]
   -v --version                  Show version
-  -l --light <theme>               Report color [default: default]
-  -f --format <fmt>                Report format [default: stylish]
+  -f --format <fmt>             Report format [default: stylish]
 DOC;
 
 $args = Docopt::handle($doc, array('version' => $about));
 
-echo genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format'], $args['--light']);
+echo genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format'], $args['--theme']);
