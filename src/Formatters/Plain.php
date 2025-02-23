@@ -72,7 +72,7 @@ function plain(array $tree, string $theme, string $path = '', int $depth = 1): s
             $afterValue = getString($keyData['afterValue'], $theme);
 
             // phpcs:ignore
-            $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was {$updatedMarker}. From {$beforeValue} to {$afterValue}\n";
+            $string = "\033[{$colors['text']}mProperty \033[{$colors['primary']}m'{$newPath}'\033[{$colors['text']}m was {$updatedMarker}. From {$beforeValue}\033[{$colors['text']}m to {$afterValue}\n";
             return "{$resultString}{$string}";
         },
         ''
