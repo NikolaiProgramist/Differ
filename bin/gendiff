@@ -22,7 +22,7 @@ $about = <<<ABOUT
 
 Version: 1.0
 
-Utility/Library for finding differences between data structures.
+Library/Utility for finding differences between data structures.
 With different output formats (stylish, plain, json).
 ABOUT;
 
