@@ -4,11 +4,11 @@
 
 ## About
 
-This project is a console utility that finds the difference between two files.
-This utility can work with such data formats as: `JSON`, `YAML`, `YML`.
-You can also see the comparison result in different output formats, for example: `stylish`, `plain`, `json`.
-The default output format is `stylish`.
-If the files do not exist, the utility will notify you about it.
+This project is a library/utility that finds the difference between two files.
+The library can work with data formats such as: `JSON`, `YAML`, `YML`.
+You can also see the result of the comparison in the terminal in different output formats,
+for example: `stylish`, `plain`, `json`. The default format is `stylish`.
+If the files do not exist, the library will inform you.
 
 ## Prerequisites
 
