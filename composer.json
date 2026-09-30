@@ -5,13 +5,6 @@
     "keywords": ["utility", "parser", "json", "yaml"],
     "homepage": "https://github.com/NikolaiProgramist/Differ",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "NikolaiProgramist",
-            "email": "nikluk2005@mail.ru",
-            "role": "Developer"
-        }
-    ],
     "require": {
         "php": ">=8.3",
         "wp-cli/php-cli-tools": "^0.12.0",
