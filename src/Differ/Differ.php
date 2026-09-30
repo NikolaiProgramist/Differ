@@ -11,8 +11,12 @@ use function Differ\Parser\parseToJson;
 /**
  * @throws Exception
  */
-function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish'): string
-{
+function genDiff(
+    string $pathToFile1,
+    string $pathToFile2,
+    string $format = 'stylish',
+    string $theme = 'default'
+): string {
     $firstFile = parseToJson($pathToFile1);
     $secondFile = parseToJson($pathToFile2);
 
@@ -20,7 +24,7 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'sty
     $elements2 = sortingSecondFile($secondFile, $firstFile);
 
     $resultDiff = sortArrayByKeysRecursive(array_merge_recursive($elements, $elements2));
-    return parse($resultDiff, $format);
+    return parse($resultDiff, $format, $theme);
 }
 
 function sortingFirstFile(mixed $tree1, mixed $tree2): mixed

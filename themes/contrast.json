@@ -1,0 +1,13 @@
+{
+  "end": "0",
+  "primary": "1",
+  "text": "0",
+  "string": "32",
+  "number": "36",
+  "symbol": "36",
+  "complex": "92",
+  "special": "35",
+  "info": "32",
+  "add": "42",
+  "remove": "41"
+}

@@ -7,9 +7,12 @@ use Symfony\Component\Yaml\Yaml;
 
 use function Differ\Formatters\selectFormatter;
 
-function parse(array $resultDiff, string $format): string
+/**
+ * @throws Exception
+ */
+function parse(array $resultDiff, string $format, string $theme): string
 {
-    return selectFormatter($resultDiff, $format);
+    return selectFormatter($resultDiff, $format, $theme);
 }
 
 /**
