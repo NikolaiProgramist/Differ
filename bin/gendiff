@@ -20,7 +20,7 @@ $about = <<<ABOUT
 | |_| | |  _|  _|  __/ |   
 |____/|_|_| |_|  \___|_|   
 
-Version: 1.0
+Version: 2.0
 
 Library/Utility for finding differences between data structures.
 With different output formats (stylish, plain, json).
